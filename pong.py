@@ -21,9 +21,10 @@ class PyGameWindowView:
         self.model = model
         self.screen = pygame.display.set_mode(size)
 
-    def draw(self):
+    def draw(self, ball):
         """ Draw the current game state to the screen """
         self.screen.fill(pygame.Color(0,0,0))
+        self.screen.blit(ball.surf, (size[0]/2, size[1]/2)) #this puts it in roughly center of screen
         #add code to draw paddles and ball
         #puts the new visuals on the screen
         pygame.display.update()
@@ -95,6 +96,22 @@ class Player:
         self.positionx=self.positionx+self.amount
         return self.positionx
 
+    def update_score():
+        """account for goal and update score"""
+        pass
+
+class SpriteBall(pygame.sprite.Sprite):
+    #Sprite documentation https://www.pygame.org/docs/ref/sprite.html
+    def __init__(self, color, width, height):
+        #call parent class (Sprite) constructor
+        pygame.sprite.Sprite.__init__(self)
+
+        #Create image of block, fill with Color
+        #Could also be image loaded from disk (for easter eggs)
+        self.surf = pygame.Surface([width, height])
+        self.surf.fill(color)
+
+        self.rect = self.surf.get_rect()
 
 class Ball:
     """
@@ -137,4 +154,25 @@ class Ball:
 
 
 if __name__ == '__main__':
-    pass
+    pygame.init()
+    size = (1200, 600)
+    model = GameModel(size)
+    print(model)
+    view = PyGameWindowView(model, size)
+    controller = PyGameKeyboardController(model)
+    ballSprite = SpriteBall((255, 255, 255), 10, 10)
+    running = True
+    while running:
+        for event in pygame.event.get():
+            #quit if x is hit or escape key is pressed
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == KEYDOWN and event.key == K_ESCAPE:
+                running = False
+
+            controller.handle_event(event, 1, 2)
+
+        view.draw(ballSprite)
+        time.sleep(.001)
+
+    pygame.quit()
