@@ -49,14 +49,14 @@ class Player(pygame.sprite.Sprite):
     def update(self, pressed_keys):
         if self.num == 1:
             if pressed_keys[K_UP]:
-                self.rect.move_ip(0, -1)
+                self.rect.move_ip(0, -2)
             if pressed_keys[K_DOWN]:
-                self.rect.move_ip(0, 1)
+                self.rect.move_ip(0, 2)
         elif self.num == 0:
             if pressed_keys[K_w]:
-                self.rect.move_ip(0, -1)
+                self.rect.move_ip(0, -2)
             if pressed_keys[K_s]:
-                self.rect.move_ip(0, 1)
+                self.rect.move_ip(0, 2)
 
         # Keep player on the screen
         if self.rect.left < 0:
@@ -80,11 +80,19 @@ class Ball(pygame.sprite.Sprite):
             center=(SCREEN_WIDTH/2,SCREEN_HEIGHT/2)
         )
         self.speed = 1
-
+        self.count=0
+        self.max_count=5
     # Move the sprite based on speed
     # Remove it when it passes the left edge of the screen
     def update(self):
         self.rect.move_ip(-self.speed, 0)
+        pygame.time.wait(1)
+        # if self.count < self.max_count:
+        #     self.count+=1
+        # else:
+        #     self.rect.move_ip(-self.speed, 0)
+        #     self.count=0
+
         if self.rect.right < 0:
             self.kill()
 
@@ -114,9 +122,9 @@ players = pygame.sprite.Group()
 all_sprites.add(player0)
 all_sprites.add(player1)
 all_sprites.add(ball)
-balls.add(ball)
 players.add(player0)
 players.add(player1)
+balls.add(ball)
 
 
 # Variable to keep our main loop running
@@ -159,10 +167,8 @@ while running:
         screen.blit(entity.surf, entity.rect)
 
     # Check if any balls have collided with either player
-    if pygame.sprite.spritecollideany(player0, balls):
+    if pygame.sprite.spritecollideany(ball, players):
         ball.speed=-ball.speed
-    if pygame.sprite.spritecollideany(player1, balls):
-        ball.speed=-ball.speed
-
     # Flip everything to the display
     pygame.display.flip()
+pygame.quit()
