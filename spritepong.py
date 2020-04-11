@@ -13,34 +13,50 @@ from pygame.locals import (
     K_LEFT,
     K_RIGHT,
     K_ESCAPE,
+    K_w,
+    K_s,
     KEYDOWN,
     QUIT,
 )
 
 # Define constants for the screen width and height
-SCREEN_WIDTH = 800
+SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
 
 
 # Define the Player object extending pygame.sprite.Sprite
 # The surface we draw on the screen is now a property of 'player'
 class Player(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, num):
+        """
+        Num: 0 for left player, 1 for right player
+        """
         super(Player, self).__init__()
+        self.num = num
         self.surf = pygame.Surface((25, 75))
         self.surf.fill((255, 255, 255))
-        self.rect = self.surf.get_rect()
 
+        if num == 0:
+            self.rect = self.surf.get_rect(
+                center = (25, random.randint(0, SCREEN_HEIGHT))
+            )
+        elif num == 1:
+            self.rect = self.surf.get_rect(
+                center = (SCREEN_WIDTH-25, random.randint(0, SCREEN_HEIGHT))
+            )
+        #self.rect = self.surf.get_rect()
     # Move the sprite based on keypresses
     def update(self, pressed_keys):
-        if pressed_keys[K_UP]:
-            self.rect.move_ip(0, -1)
-        if pressed_keys[K_DOWN]:
-            self.rect.move_ip(0, 1)
-        if pressed_keys[K_LEFT]:
-            self.rect.move_ip(-1, 0)
-        if pressed_keys[K_RIGHT]:
-            self.rect.move_ip(1, 0)
+        if self.num == 1:
+            if pressed_keys[K_UP]:
+                self.rect.move_ip(0, -1)
+            if pressed_keys[K_DOWN]:
+                self.rect.move_ip(0, 1)
+        elif self.num == 0:
+            if pressed_keys[K_w]:
+                self.rect.move_ip(0, -1)
+            if pressed_keys[K_s]:
+                self.rect.move_ip(0, 1)
 
         # Keep player on the screen
         if self.rect.left < 0:
@@ -64,6 +80,7 @@ class Ball(pygame.sprite.Sprite):
             center=(SCREEN_WIDTH/2,SCREEN_HEIGHT/2)
         )
         self.speed = 1
+
     # Move the sprite based on speed
     # Remove it when it passes the left edge of the screen
     def update(self):
@@ -84,7 +101,8 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 # pygame.time.set_timer(ADDBall, 250)
 
 # Create our 'player'
-player = Player()
+player0 = Player(0)
+player1 = Player(1)
 ball=Ball()
 
 # Create groups to hold Ball sprites, and every sprite
@@ -92,9 +110,14 @@ ball=Ball()
 # - all_sprites is used for rendering
 balls = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
-all_sprites.add(player)
+players = pygame.sprite.Group()
+all_sprites.add(player0)
+all_sprites.add(player1)
 all_sprites.add(ball)
 balls.add(ball)
+players.add(player0)
+players.add(player1)
+
 
 # Variable to keep our main loop running
 running = True
@@ -122,7 +145,8 @@ while running:
 
     # Get the set of keys pressed and check for user input
     pressed_keys = pygame.key.get_pressed()
-    player.update(pressed_keys)
+    player0.update(pressed_keys)
+    player1.update(pressed_keys)
 
     # Update the position of our balls
     ball.update()
@@ -130,12 +154,14 @@ while running:
     # Fill the screen with black
     screen.fill((0, 0, 0))
 
-    # Draw all our sprites
+    #Draw all our sprites
     for entity in all_sprites:
         screen.blit(entity.surf, entity.rect)
 
-    # Check if any balls have collided with the player
-    if pygame.sprite.spritecollideany(player, balls):
+    # Check if any balls have collided with either player
+    if pygame.sprite.spritecollideany(player0, balls):
+        ball.speed=-ball.speed
+    if pygame.sprite.spritecollideany(player1, balls):
         ball.speed=-ball.speed
 
     # Flip everything to the display
