@@ -5,6 +5,7 @@ import pygame
 # Import random for random numbers
 import random
 import math
+import time
 # Import pygame.locals for easier access to key coordinates
 # Updated to conform to flake8 and black standards
 from pygame.locals import (
@@ -94,13 +95,13 @@ class Ball(pygame.sprite.Sprite):
         self.x = SCREEN_WIDTH/2
         self.y = SCREEN_HEIGHT/2
         self.speed = .5
+
         #self.count=0
         #self.max_count=5
 
-    def reset(self, speed=.5):
+    def reset(self):
         self.x = SCREEN_WIDTH/2
         self.y = SCREEN_HEIGHT/2
-        self.speed = speed
 
         self.direction = random.choice([-45, 45, 135, -135, 225, -225])
 
@@ -114,7 +115,7 @@ class Ball(pygame.sprite.Sprite):
         self.direction = (180-self.direction)%360
         self.direction -= diff
 
-            #self.speed *= 1.1
+        #self.speed *= 1.1
     # Move the sprite based on speed
     # Remove it when it passes the left edge of the screen
     def update(self):
@@ -172,7 +173,7 @@ players.add(player0)
 players.add(player1)
 balls.add(ball)
 
-
+clock = pygame.time.Clock()
 # Variable to keep our main loop running
 running = True
 
@@ -228,7 +229,10 @@ while running:
 
         ball.x = SCREEN_WIDTH-40
         ball.bounce(diff)
+    print(ball.speed)
+
         #ball.speed=-ball.speed
     # Flip everything to the display
     pygame.display.flip()
+    #clock.tick(100)
 pygame.quit()
