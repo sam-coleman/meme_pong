@@ -1,24 +1,17 @@
+"""
+SoftDes Spring 2020
+Micro-Project 4
+Pong Micro View Controller
 
-# Import the pygame module
+@authors: Sam Coleman and Hazel Smith
+"""
+
 import pygame
-
-# Import random for random numbers
+from pygame.locals import *
 import random
 import math
 import time
-# Import pygame.locals for easier access to key coordinates
-# Updated to conform to flake8 and black standards
-from pygame.locals import (
-    K_UP,
-    K_DOWN,
-    K_LEFT,
-    K_RIGHT,
-    K_ESCAPE,
-    K_w,
-    K_s,
-    KEYDOWN,
-    QUIT,
-)
+
 
 # Define constants for the screen width and height
 SCREEN_WIDTH = 1000
@@ -108,16 +101,28 @@ class Ball(pygame.sprite.Sprite):
         #have ball go in other direction
         if random.randint(0, 1) == 0:
             self.direction += 180
+
     def bounce(self, diff=0):
-        """ Bounce off horizontal surface
+        """ Bounce off a surface
         """
 
         self.direction = (180-self.direction)%360
         self.direction -= diff
 
-        #self.speed *= 1.1
     # Move the sprite based on speed
     # Remove it when it passes the left edge of the screen
+
+    def hit_paddle(self,player):
+        if pygame.sprite.collide_rect(self, player):
+            diff = (player.rect.y + player.width/2) - (self.rect.y + self.width/2)
+
+            self.x = 40
+            self.bounce(diff)
+
+    def hit_wall(self):
+        if ball.y < 0 or ball.y > SCREEN_HEIGHT:
+            ball.bounce()
+
     def update(self):
         dir_rad = math.radians(self.direction)
         self.x += self.speed * math.sin(dir_rad)
@@ -144,95 +149,85 @@ class Ball(pygame.sprite.Sprite):
             self.kill()
 
 
-# Initialize pygame
-pygame.init()
+if __name__ == '__main__':
+    # Initialize pygame
+    pygame.init()
 
-# Create the screen object
-# The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    # Create the screen object
+    # The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-# Create a custom event for adding a new Ball.
-# ADDBall = pygame.USEREVENT + 1
-# pygame.time.set_timer(ADDBall, 250)
+    # Create a custom event for adding a new Ball.
+    # ADDBall = pygame.USEREVENT + 1
+    # pygame.time.set_timer(ADDBall, 250)
 
-# Create our 'player'
-player0 = Player(0)
-player1 = Player(1)
-ball=Ball()
+    # Create our 'player'
+    player0 = Player(0)
+    player1 = Player(1)
+    ball=Ball()
 
-# Create groups to hold Ball sprites, and every sprite
-# - balls is used for collision detection and position updates
-# - all_sprites is used for rendering
-balls = pygame.sprite.Group()
-all_sprites = pygame.sprite.Group()
-players = pygame.sprite.Group()
-all_sprites.add(player0)
-all_sprites.add(player1)
-all_sprites.add(ball)
-players.add(player0)
-players.add(player1)
-balls.add(ball)
+    # Create groups to hold Ball sprites, and every sprite
+    # - balls is used for collision detection and position updates
+    # - all_sprites is used for rendering
+    balls = pygame.sprite.Group()
+    all_sprites = pygame.sprite.Group()
+    players = pygame.sprite.Group()
+    all_sprites.add(player0)
+    all_sprites.add(player1)
+    all_sprites.add(ball)
+    players.add(player0)
+    players.add(player1)
+    balls.add(ball)
 
-clock = pygame.time.Clock()
-# Variable to keep our main loop running
-running = True
+    clock = pygame.time.Clock()
+    # Variable to keep our main loop running
+    running = True
 
-# Our main loop
-while running:
+    # Our main loop
+    while running:
 
-    # Look at every event in the queue
-    for event in pygame.event.get():
-        # Did the user hit a key?
-        if event.type == KEYDOWN:
-            # Was it the Escape key? If so, stop the loop
-            if event.key == K_ESCAPE:
+        # Look at every event in the queue
+        for event in pygame.event.get():
+            # Did the user hit a key?
+            if event.type == KEYDOWN:
+                # Was it the Escape key? If so, stop the loop
+                if event.key == K_ESCAPE:
+                    running = False
+
+            # Did the user click the window close button? If so, stop the loop
+            elif event.type == QUIT:
                 running = False
 
-        # Did the user click the window close button? If so, stop the loop
-        elif event.type == QUIT:
-            running = False
+            # Should we add a new Ball?
+            # elif event.type == ADDBall:
+            #     # Create the new Ball, and add it to our sprite groups
+            #     new_Ball = Ball()
+            #     balls.add(new_Ball)
+            #     all_sprites.add(new_Ball)
 
-        # Should we add a new Ball?
-        # elif event.type == ADDBall:
-        #     # Create the new Ball, and add it to our sprite groups
-        #     new_Ball = Ball()
-        #     balls.add(new_Ball)
-        #     all_sprites.add(new_Ball)
+        # Get the set of keys pressed and check for user input
+        pressed_keys = pygame.key.get_pressed()
+        player0.update(pressed_keys)
+        player1.update(pressed_keys)
 
-    # Get the set of keys pressed and check for user input
-    pressed_keys = pygame.key.get_pressed()
-    player0.update(pressed_keys)
-    player1.update(pressed_keys)
+        # Check if any balls have collided with either horzontal wall
+        ball.hit_wall()
 
-    # Update the position of our balls
-    if ball.y < 0 or ball.y > SCREEN_HEIGHT:
-        ball.bounce()
+        # Update the position of our balls
+        ball.update()
 
-    ball.update()
+        # Fill the screen with black
+        screen.fill((0, 0, 0))
 
-    # Fill the screen with black
-    screen.fill((0, 0, 0))
+        #Draw all our sprites
+        for entity in all_sprites:
+            screen.blit(entity.surf, entity.rect)
 
-    #Draw all our sprites
-    for entity in all_sprites:
-        screen.blit(entity.surf, entity.rect)
+        # Check if any balls have collided with either player
+        for player in players:
+            ball.hit_paddle(player)
 
-    # Check if any balls have collided with either player
-    if pygame.sprite.collide_rect(ball, player0):
-        diff = (player0.rect.y + player0.width/2) - (ball.rect.y + ball.width/2)
-
-        ball.x = 40
-        ball.bounce(diff)
-
-    if pygame.sprite.collide_rect(ball, player1):
-        diff = (player1.rect.y + player1.width/2) - (ball.rect.y + ball.width/2)
-
-        ball.x = SCREEN_WIDTH-40
-        ball.bounce(diff)
-    print(ball.speed)
-
-        #ball.speed=-ball.speed
-    # Flip everything to the display
-    pygame.display.flip()
-    #clock.tick(100)
-pygame.quit()
+        # Flip everything to the display
+        pygame.display.flip()
+        #clock.tick(100)
+    pygame.quit()
