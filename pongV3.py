@@ -11,6 +11,7 @@ from pygame.locals import *
 import random
 import math
 import time
+import sys
 
 
 # Define constants for the screen width and height
@@ -27,25 +28,25 @@ class Player(pygame.sprite.Sprite):
         """
         super(Player, self).__init__()
         self.num = num
-        self.width = 25
+        self.width = 50
         self.height = SCREEN_HEIGHT
         self.surf = pygame.Surface((self.width, self.height))
         self.surf.fill((255, 255, 255))
 
         if num == 0:
             self.rect = self.surf.get_rect(
-                center = (25, SCREEN_WIDTH/2)
+                center = (50, SCREEN_HEIGHT/2)
             )
         elif num == 1:
             self.rect = self.surf.get_rect(
-                center = (SCREEN_WIDTH-25, SCREEN_WIDTH/2)
+                center = (SCREEN_WIDTH-50, SCREEN_HEIGHT/2)
             )
         self.x = self.rect.x
         self.y = self.rect.y
         #self.rect = self.surf.get_rect()
     # Move the sprite based on keypresses
     def update(self, pressed_keys):
-
+        """Updates the postion of the player"""
         if self.num == 1:
             if pressed_keys[K_UP]:
                 #self.rect.move_ip(0, -2)
@@ -70,8 +71,10 @@ class Player(pygame.sprite.Sprite):
             self.rect.top = 0
         elif self.rect.bottom >= SCREEN_HEIGHT:
             self.rect.bottom = SCREEN_HEIGHT
+
     def hit_paddle(self,ball):
         if pygame.sprite.collide_rect(ball, self):
+            print('collision')
             diff = (self.rect.y + self.height/2) - (ball.rect.y + ball.height/2)
             if self.num==0:
                 ball.bounce(diff)
@@ -95,11 +98,11 @@ class Ball(pygame.sprite.Sprite):
         self.y = SCREEN_HEIGHT/2
         self.speed = 1
 
+
         #self.count=0
         #self.max_count=5
 
     def reset(self):
-        print(self.direction)
         self.x = SCREEN_WIDTH/2
         self.y = SCREEN_HEIGHT/2
 
@@ -108,6 +111,7 @@ class Ball(pygame.sprite.Sprite):
         #have ball go in other direction
         if random.randint(0, 1) == 0:
             self.direction += 180
+        sys.exit(0)
 
     def bounce(self, diff=0):
         """ Bounce off a surface
@@ -144,9 +148,7 @@ class Ball(pygame.sprite.Sprite):
         # else:
         #     self.rect.move_ip(-self.speed, 0)
         #     self.count=0
-
-        if self.rect.right < 0:
-            self.kill()
+        print(self.rect.x)
 
 
 if __name__ == '__main__':
