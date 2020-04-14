@@ -74,7 +74,6 @@ class Player(pygame.sprite.Sprite):
 
     def hit_paddle(self,ball):
         if pygame.sprite.collide_rect(ball, self):
-            print('collision')
             diff = (self.rect.y + self.height/2) - (ball.rect.y + ball.height/2)
             if self.num==0:
                 ball.bounce(diff)
@@ -93,7 +92,7 @@ class Ball(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect(
             center=(SCREEN_WIDTH/2,SCREEN_HEIGHT/2)
         )
-        self.direction = 45
+        self.direction = random.choice([-45, 45, 135, -135, 225, -225])
         self.x = SCREEN_WIDTH/2
         self.y = SCREEN_HEIGHT/2
         self.speed = 1
@@ -129,6 +128,7 @@ class Ball(pygame.sprite.Sprite):
 
     def update(self):
         dir_rad = math.radians(self.direction)
+        print(dir_rad)
         self.x += self.speed * math.sin(dir_rad)
         self.y += self.speed * math.cos(dir_rad)
 
@@ -148,7 +148,6 @@ class Ball(pygame.sprite.Sprite):
         # else:
         #     self.rect.move_ip(-self.speed, 0)
         #     self.count=0
-        print(self.rect.x)
 
 
 if __name__ == '__main__':
