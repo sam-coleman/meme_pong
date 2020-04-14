@@ -28,17 +28,17 @@ class Player(pygame.sprite.Sprite):
         super(Player, self).__init__()
         self.num = num
         self.width = 25
-        self.height = 75
+        self.height = SCREEN_HEIGHT
         self.surf = pygame.Surface((self.width, self.height))
         self.surf.fill((255, 255, 255))
 
         if num == 0:
             self.rect = self.surf.get_rect(
-                center = (25, random.randint(0, SCREEN_HEIGHT))
+                center = (25, SCREEN_WIDTH/2)
             )
         elif num == 1:
             self.rect = self.surf.get_rect(
-                center = (SCREEN_WIDTH-25, random.randint(0, SCREEN_HEIGHT))
+                center = (SCREEN_WIDTH-25, SCREEN_WIDTH/2)
             )
         self.x = self.rect.x
         self.y = self.rect.y
@@ -70,7 +70,13 @@ class Player(pygame.sprite.Sprite):
             self.rect.top = 0
         elif self.rect.bottom >= SCREEN_HEIGHT:
             self.rect.bottom = SCREEN_HEIGHT
-
+    def hit_paddle(self,ball):
+        if pygame.sprite.collide_rect(ball, self):
+            diff = (self.rect.y + self.height/2) - (ball.rect.y + ball.height/2)
+            if self.num==0:
+                ball.bounce(diff)
+            if self.num==1:
+                ball.bounce(-diff)
 
 # Define the Ball object extending pygame.sprite.Sprite
 # The surface we draw on the screen is now a property of 'Ball'
@@ -87,12 +93,13 @@ class Ball(pygame.sprite.Sprite):
         self.direction = 45
         self.x = SCREEN_WIDTH/2
         self.y = SCREEN_HEIGHT/2
-        self.speed = .5
+        self.speed = 1
 
         #self.count=0
         #self.max_count=5
 
     def reset(self):
+        print(self.direction)
         self.x = SCREEN_WIDTH/2
         self.y = SCREEN_HEIGHT/2
 
@@ -111,13 +118,6 @@ class Ball(pygame.sprite.Sprite):
 
     # Move the sprite based on speed
     # Remove it when it passes the left edge of the screen
-
-    def hit_paddle(self,player):
-        if pygame.sprite.collide_rect(self, player):
-            diff = (player.rect.y + player.width/2) - (self.rect.y + self.width/2)
-
-            self.x = 40
-            self.bounce(diff)
 
     def hit_wall(self):
         if ball.y < 0 or ball.y > SCREEN_HEIGHT:
@@ -225,9 +225,8 @@ if __name__ == '__main__':
 
         # Check if any balls have collided with either player
         for player in players:
-            ball.hit_paddle(player)
+            player.hit_paddle(ball)
 
         # Flip everything to the display
         pygame.display.flip()
         #clock.tick(100)
-    pygame.quit()
