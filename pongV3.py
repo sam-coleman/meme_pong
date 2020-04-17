@@ -18,7 +18,6 @@ import sys
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
 
-
 # Define the Player object extending pygame.sprite.Sprite
 # The surface we draw on the screen is now a property of 'player'
 class Player(pygame.sprite.Sprite):
@@ -74,7 +73,7 @@ class Player(pygame.sprite.Sprite):
 
     def hit_paddle(self,ball):
         if pygame.sprite.collide_rect(ball, self):
-            diff = (self.rect.y + self.height/2) - (ball.rect.y + ball.height/2)
+            diff = ((self.rect.y + self.height/2) - (ball.rect.y + ball.height/2))*20/(self.height/2)
             if self.num==0:
                 ball.bounce(diff)
             if self.num==1:
@@ -92,11 +91,11 @@ class Ball(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect(
             center=(SCREEN_WIDTH/2,SCREEN_HEIGHT/2)
         )
-        self.direction = random.choice([-45, 45, 135, -135, 225, -225])
+        self.direction = 135#random.choice([45, 135, 225, 315])
+        #print(self.direction)
         self.x = SCREEN_WIDTH/2
         self.y = SCREEN_HEIGHT/2
         self.speed = 1
-
 
         #self.count=0
         #self.max_count=5
@@ -105,30 +104,27 @@ class Ball(pygame.sprite.Sprite):
         self.x = SCREEN_WIDTH/2
         self.y = SCREEN_HEIGHT/2
 
-        self.direction = random.choice([-45, 45, 135, -135, 225, -225])
+        self.direction = random.choice([45, 135, 225, 315])
 
-        #have ball go in other direction
-        if random.randint(0, 1) == 0:
-            self.direction += 180
         sys.exit(0)
 
     def bounce(self, diff=0):
         """ Bounce off a surface
         """
 
-        self.direction = (180-self.direction)%360
+        self.direction = 360-self.direction#(180-self.direction)%360
         self.direction -= diff
 
     # Move the sprite based on speed
     # Remove it when it passes the left edge of the screen
 
     def hit_wall(self):
-        if ball.y < 0 or ball.y > SCREEN_HEIGHT:
-            ball.bounce()
+        if self.y < 0 or self.y > SCREEN_HEIGHT:
+            self.direction = (180-self.direction)%360#self.bounce()
 
     def update(self):
         dir_rad = math.radians(self.direction)
-        print(dir_rad)
+        #print(dir_rad)
         self.x += self.speed * math.sin(dir_rad)
         self.y += self.speed * math.cos(dir_rad)
 
@@ -153,7 +149,6 @@ class Ball(pygame.sprite.Sprite):
 if __name__ == '__main__':
     # Initialize pygame
     pygame.init()
-
     # Create the screen object
     # The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -210,7 +205,8 @@ if __name__ == '__main__':
         pressed_keys = pygame.key.get_pressed()
         player0.update(pressed_keys)
         player1.update(pressed_keys)
-
+        for player in players:
+            player.hit_paddle(ball)
         # Check if any balls have collided with either horzontal wall
         ball.hit_wall()
 
@@ -225,8 +221,7 @@ if __name__ == '__main__':
             screen.blit(entity.surf, entity.rect)
 
         # Check if any balls have collided with either player
-        for player in players:
-            player.hit_paddle(ball)
+
 
         # Flip everything to the display
         pygame.display.flip()
