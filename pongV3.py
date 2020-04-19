@@ -1,7 +1,6 @@
 """
 SoftDes Spring 2020
-Micro-Project 4
-Pong Micro View Controller
+Final Project: Pong
 
 @authors: Sam Coleman and Hazel Smith
 """
@@ -11,8 +10,6 @@ from pygame.locals import *
 import random
 import math
 import time
-import sys
-
 
 # Define constants for the screen width and height
 SCREEN_WIDTH = 1000
@@ -27,8 +24,8 @@ class Player(pygame.sprite.Sprite):
         """
         super(Player, self).__init__()
         self.num = num
-        self.width = 50
-        self.height = SCREEN_HEIGHT
+        self.width = 25
+        self.height = 100
         self.surf = pygame.Surface((self.width, self.height))
         self.surf.fill((255, 255, 255))
 
@@ -42,30 +39,22 @@ class Player(pygame.sprite.Sprite):
             )
         self.x = self.rect.x
         self.y = self.rect.y
-        #self.rect = self.surf.get_rect()
+        self.score = 0
     # Move the sprite based on keypresses
     def update(self, pressed_keys):
         """Updates the postion of the player"""
         if self.num == 1:
             if pressed_keys[K_UP]:
-                #self.rect.move_ip(0, -2)
                 self.rect.y -= 1
             if pressed_keys[K_DOWN]:
-                #self.rect.move_ip(0, 2)
                 self.rect.y += 1
         elif self.num == 0:
             if pressed_keys[K_w]:
-                #self.rect.move_ip(0, -2)
                 self.rect.y -= 1
             if pressed_keys[K_s]:
-                #self.rect.move_ip(0, 2)
                 self.rect.y += 1
 
         # Keep player on the screen
-        if self.rect.left < 0:
-            self.rect.left = 0
-        elif self.rect.right > SCREEN_WIDTH:
-            self.rect.right = SCREEN_WIDTH
         if self.rect.top <= 0:
             self.rect.top = 0
         elif self.rect.bottom >= SCREEN_HEIGHT:
@@ -91,14 +80,10 @@ class Ball(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect(
             center=(SCREEN_WIDTH/2,SCREEN_HEIGHT/2)
         )
-        self.direction = 135#random.choice([45, 135, 225, 315])
-        #print(self.direction)
+        self.direction = random.choice([45, 135, 225, 315])
         self.x = SCREEN_WIDTH/2
         self.y = SCREEN_HEIGHT/2
-        self.speed = 1
-
-        #self.count=0
-        #self.max_count=5
+        self.speed = .5
 
     def reset(self):
         self.x = SCREEN_WIDTH/2
@@ -106,45 +91,34 @@ class Ball(pygame.sprite.Sprite):
 
         self.direction = random.choice([45, 135, 225, 315])
 
-        sys.exit(0)
-
     def bounce(self, diff=0):
-        """ Bounce off a surface
+        """ Bounce off a paddle
         """
 
-        self.direction = 360-self.direction#(180-self.direction)%360
+        self.direction = 360-self.direction
         self.direction -= diff
-
-    # Move the sprite based on speed
-    # Remove it when it passes the left edge of the screen
 
     def hit_wall(self):
         if self.y < 0 or self.y > SCREEN_HEIGHT:
-            self.direction = (180-self.direction)%360#self.bounce()
+            self.direction = (180-self.direction)%360
 
     def update(self):
         dir_rad = math.radians(self.direction)
-        #print(dir_rad)
         self.x += self.speed * math.sin(dir_rad)
         self.y += self.speed * math.cos(dir_rad)
 
         if self.x<0:
             self.reset()
+            player0.score += 1
         if self.x>1000:
             self.reset()
-
+            player1.score += 1
         #move ball to current x and y values
         self.rect.x = self.x
         self.rect.y = self.y
-        #self.rect.move_ip(-self.speed, 0)
 
-        #pygame.time.wait(.01)
-        # if self.count < self.max_count:
-        #     self.count+=1
-        # else:
-        #     self.rect.move_ip(-self.speed, 0)
-        #     self.count=0
-
+class Scoreboard():
+    
 
 if __name__ == '__main__':
     # Initialize pygame
@@ -194,19 +168,15 @@ if __name__ == '__main__':
             elif event.type == QUIT:
                 running = False
 
-            # Should we add a new Ball?
-            # elif event.type == ADDBall:
-            #     # Create the new Ball, and add it to our sprite groups
-            #     new_Ball = Ball()
-            #     balls.add(new_Ball)
-            #     all_sprites.add(new_Ball)
-
         # Get the set of keys pressed and check for user input
         pressed_keys = pygame.key.get_pressed()
         player0.update(pressed_keys)
         player1.update(pressed_keys)
+
+        # Check if ball have collided with either player
         for player in players:
             player.hit_paddle(ball)
+
         # Check if any balls have collided with either horzontal wall
         ball.hit_wall()
 
@@ -220,9 +190,5 @@ if __name__ == '__main__':
         for entity in all_sprites:
             screen.blit(entity.surf, entity.rect)
 
-        # Check if any balls have collided with either player
-
-
         # Flip everything to the display
         pygame.display.flip()
-        #clock.tick(100)
