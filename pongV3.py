@@ -41,6 +41,10 @@ class Player(pygame.sprite.Sprite):
         self.y = self.rect.y
         self.score = 0
     # Move the sprite based on keypresses
+
+    def allen_design(self): #switch paddles to allen downey design
+        print('running alen design function')
+
     def update(self, pressed_keys):
         """Updates the postion of the player"""
         if self.num == 1:
@@ -48,17 +52,23 @@ class Player(pygame.sprite.Sprite):
                 self.rect.y -= 1
             if pressed_keys[K_DOWN]:
                 self.rect.y += 1
+            if pressed_keys[K_RIGHT]:
+                self.rect.x += 1
         elif self.num == 0:
             if pressed_keys[K_w]:
                 self.rect.y -= 1
             if pressed_keys[K_s]:
                 self.rect.y += 1
 
-        # Keep player on the screen
+        # Keep player on the screen but allow player 1 motion to right
         if self.rect.top <= 0:
             self.rect.top = 0
         elif self.rect.bottom >= SCREEN_HEIGHT:
             self.rect.bottom = SCREEN_HEIGHT
+        elif self.num == 1 and self.rect.right == SCREEN_WIDTH: #will move player to minigame
+            player.allen_design()
+
+
 
     def hit_paddle(self,ball):
         if pygame.sprite.collide_rect(ball, self):
@@ -83,7 +93,7 @@ class Ball(pygame.sprite.Sprite):
         self.direction = random.choice([45, 135, 225, 315])
         self.x = SCREEN_WIDTH/2
         self.y = SCREEN_HEIGHT/2
-        self.speed = .75
+        self.speed = .5
 
     def reset(self):
         self.x = SCREEN_WIDTH/2
