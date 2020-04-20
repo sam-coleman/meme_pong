@@ -43,8 +43,16 @@ class Player(pygame.sprite.Sprite):
     # Move the sprite based on keypresses
 
     def allen_design(self): #switch paddles to allen downey design
+        """Change design of paddles
+        """
         print('running alen design function')
+        player0.surf = pygame.image.load("steve.png").convert()
+        player1.surf = pygame.image.load("amon.png").convert()
 
+        #put right player back on screen
+        player1.rect = self.surf.get_rect(
+            center = (SCREEN_WIDTH-50, SCREEN_HEIGHT/2)
+        )
     def update(self, pressed_keys):
         """Updates the postion of the player"""
         if self.num == 1:
@@ -66,9 +74,11 @@ class Player(pygame.sprite.Sprite):
         elif self.rect.bottom >= SCREEN_HEIGHT:
             self.rect.bottom = SCREEN_HEIGHT
         elif self.num == 1 and self.rect.right == SCREEN_WIDTH: #will move player to minigame
-            player.allen_design()
-
-
+            #NEED TO CHANGE TO STARTING THE MINI GAME, WHEN THE BIKE IS GOTTEN, THEN TRIGGER THE ALLEN_DESIGN FUNCTIONS
+                #MAKE BALL SPEED 0
+                #CALL RESET AFTER BIKE IS GOTTEN TO ALSO GET GAME GOING AGAIN
+            self.allen_design()
+            ball.allen_design()
 
     def hit_paddle(self,ball):
         if pygame.sprite.collide_rect(ball, self):
@@ -94,6 +104,9 @@ class Ball(pygame.sprite.Sprite):
         self.x = SCREEN_WIDTH/2
         self.y = SCREEN_HEIGHT/2
         self.speed = .5
+
+    def allen_design(self):
+        self.surf = pygame.image.load("allen.jpg").convert()
 
     def reset(self):
         self.x = SCREEN_WIDTH/2
