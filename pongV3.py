@@ -73,8 +73,8 @@ class Player(pygame.sprite.Sprite):
 class Ball(pygame.sprite.Sprite):
     def __init__(self):
         super(Ball, self).__init__()
-        self.height = 10
-        self.width = 10
+        self.height = 25
+        self.width = 25
         self.surf = pygame.Surface((self.height, self.width))
         self.surf.fill((255, 255, 255))
         self.rect = self.surf.get_rect(
@@ -83,7 +83,7 @@ class Ball(pygame.sprite.Sprite):
         self.direction = random.choice([45, 135, 225, 315])
         self.x = SCREEN_WIDTH/2
         self.y = SCREEN_HEIGHT/2
-        self.speed = .5
+        self.speed = .75
 
     def reset(self):
         self.x = SCREEN_WIDTH/2
@@ -97,6 +97,7 @@ class Ball(pygame.sprite.Sprite):
 
         self.direction = 360-self.direction
         self.direction -= diff
+        self.speed *= 1.0001 #*very* slowly get faster
 
     def hit_wall(self):
         if self.y < 0 or self.y > SCREEN_HEIGHT:
@@ -109,33 +110,44 @@ class Ball(pygame.sprite.Sprite):
 
         if self.x<0:
             self.reset()
-            player0.score += 1
+            player1.score += 1
         if self.x>1000:
             self.reset()
-            player1.score += 1
+            player0.score += 1
+        scoreboard.update_score(player0, player1)
         #move ball to current x and y values
         self.rect.x = self.x
         self.rect.y = self.y
 
 class Scoreboard():
-    
+    def __init__(self, font):
+        self.color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255))
+        self.score0_surface = font.render('0', False, self.color)
+        self.score1_surface = font.render('0', False, self.color)
+        self.font = font
+    def update_score(self, player0, player1):
+        self.score0_surface = self.font.render(str(player0.score), False, self.color)
+        self.score1_surface = self.font.render(str(player1.score), False, self.color)
+
 
 if __name__ == '__main__':
     # Initialize pygame
     pygame.init()
+    pygame.font.init()
+    font = pygame.font.SysFont('din', 80)
     # Create the screen object
     # The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-
+    pygame.display.set_caption('Pong')
     # Create a custom event for adding a new Ball.
     # ADDBall = pygame.USEREVENT + 1
     # pygame.time.set_timer(ADDBall, 250)
 
-    # Create our 'player'
+    # Create our 'players'
     player0 = Player(0)
     player1 = Player(1)
     ball=Ball()
-
+    scoreboard = Scoreboard(font)
     # Create groups to hold Ball sprites, and every sprite
     # - balls is used for collision detection and position updates
     # - all_sprites is used for rendering
@@ -189,6 +201,7 @@ if __name__ == '__main__':
         #Draw all our sprites
         for entity in all_sprites:
             screen.blit(entity.surf, entity.rect)
-
+        screen.blit(scoreboard.score0_surface, (SCREEN_WIDTH/4, 25))
+        screen.blit(scoreboard.score1_surface, (SCREEN_WIDTH - SCREEN_WIDTH/4, 25))
         # Flip everything to the display
         pygame.display.flip()
