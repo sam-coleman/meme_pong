@@ -53,8 +53,8 @@ class Player(pygame.sprite.Sprite):
         """
 
         #change paddles to Steve and Amon
-        player0.surf = pygame.image.load("steve.png").convert()
-        player1.surf = pygame.image.load("amon.png").convert()
+        player0.surf = pygame.image.load("images/steve.png").convert()
+        player1.surf = pygame.image.load("images/amon.png").convert()
 
         #put player on right back in the correct position on screen
         player1.rect = self.surf.get_rect(
@@ -147,7 +147,7 @@ class Ball(pygame.sprite.Sprite):
     def allen_design(self):
         """Change design of paddles to Allen Downey theme
         """
-        self.surf = pygame.image.load("allen.jpg").convert()
+        self.surf = pygame.image.load("images/allen.jpg").convert()
 
     def reset(self):
         """Resets the ball to the center of the sceeen and makes it moves

@@ -21,7 +21,7 @@ class Person(pygame.sprite.Sprite):
         Num: 0 for left player, 1 for right player
         """
         super(Person, self).__init__()
-        self.surf = pygame.image.load("standing.png").convert()
+        self.surf = pygame.image.load("images/standing.png").convert()
         self.rect = self.surf.get_rect(center = (25,SCREEN_HEIGHT-50))
         self.vertical=0
         self.horzontal=0
@@ -57,7 +57,7 @@ class Person(pygame.sprite.Sprite):
             self.rect.left = 0
         elif self.rect.right >= SCREEN_WIDTH:
             self.rect.right = SCREEN_WIDTH
-            
+
         self.vertical=0
         self.horzontal=0
 
