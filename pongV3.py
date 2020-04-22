@@ -48,6 +48,8 @@ class Player(pygame.sprite.Sprite):
         self.y = self.rect.y
         self.score = 0
 
+        #when game starts, the minigame has not been played yet
+        self.played_minigame = False
     def allen_design(self): #switch paddles to allen downey design
         """Change design of paddles to Allen Downey theme
         """
@@ -79,7 +81,7 @@ class Player(pygame.sprite.Sprite):
                 self.rect.y -= 1
             if pressed_keys[K_DOWN]:
                 self.rect.y += 1
-            if pressed_keys[K_RIGHT]:
+            if pressed_keys[K_RIGHT] and self.played_minigame == False:
                 self.rect.x += 1
         elif self.num == 0:
             if pressed_keys[K_w]:
@@ -96,6 +98,7 @@ class Player(pygame.sprite.Sprite):
             #NEED TO CHANGE TO STARTING THE MINI GAME, WHEN THE BIKE IS GOTTEN, THEN TRIGGER THE ALLEN_DESIGN FUNCTIONS
                 #MAKE BALL SPEED 0
                 #CALL RESET AFTER BIKE IS GOTTEN TO ALSO GET GAME GOING AGAIN
+            self.played_minigame = True
             self.allen_design()
             ball.allen_design()
 
