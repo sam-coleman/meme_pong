@@ -145,7 +145,7 @@ class Ball(pygame.sprite.Sprite):
         self.speed = .5
 
     def allen_design(self):
-        """Change design of paddles to Allen Downey theme
+        """Change design of ball to Allen Downey theme
         """
         self.surf = pygame.image.load("allen.jpg").convert()
 
@@ -233,7 +233,7 @@ class Scoreboard():
         self.font = font
 
     def update_score(self, player0, player1):
-        """ Update the scores of each player0
+        """ Update the scores of each player
 
         Updates the score of each player and is called in ball class update function.
 

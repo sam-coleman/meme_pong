@@ -11,6 +11,7 @@ from pygame.locals import *
 import random
 import math
 import time
+import numpy as np
 
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
@@ -18,38 +19,63 @@ SCREEN_HEIGHT = 600
 class Person(pygame.sprite.Sprite):
     def __init__(self):
         """
-        Num: 0 for left player, 1 for right player
         """
         super(Person, self).__init__()
         self.surf = pygame.image.load("standing.png").convert()
         self.rect = self.surf.get_rect(center = (25,SCREEN_HEIGHT-50))
-        self.vertical=0
-        self.horzontal=0
+        self.x=self.rect.x
+        self.y=self.rect.y
+        self.vx=0
+        self.vy=0
+        self.ax=0
+        self.ay=0
 
-    def update(self, pressed_keys):
-        """Updates the postion of the player"""
-        if pressed_keys[K_UP]:
-            self.vertical=1
-        if pressed_keys[K_DOWN]:
-            self.vertical=-1
-        if pressed_keys[K_RIGHT]:
-            self.horzontal=1
-        if pressed_keys[K_LEFT]:
-            self.horzontal=-1
+    def jump(self):
+        """
+        Makes person jump
+        """
+        if self.is_touching_ground()==True: #or touching platform
+            self.vy=-1.5
 
-        if self.vertical==1:
-            self.rect.y -= 2
-        if self.vertical==-1:
-            self.rect.y += 2
-        if self.horzontal==1:
-            self.rect.x += 2
-        if self.horzontal==-1:
-            self.rect.x -= 2
+    def walk(self,direction):
+        """
+        Makes person walk
+        """
+        self.vx=direction/2
 
+    def is_touching_ground(self):
+        """
+        Checks if person is standing or in free fall
+        """
+        if self.rect.bottom==SCREEN_HEIGHT:
+            return True
+        else:
+            return False
+
+    def accelerate(self):
+        """
+        Changes acceleration of the Person
+        """
+        if self.is_touching_ground()==False:
+            self.ay=.005
+        else:
+            self.ay=0
+
+        if self.vx!=0:
+            self.ax=1*-np.sign(self.vx)
+        else:
+            self.ax=0
+
+
+    def keep_on_screen(self):
+        """
+        Ensures that the person stays on screen
+        """
         if self.rect.top <= 0:
             self.rect.top = 0
         else:
             self.rect.y += 1
+
         if self.rect.bottom >= SCREEN_HEIGHT:
             self.rect.bottom = SCREEN_HEIGHT
 
@@ -57,9 +83,30 @@ class Person(pygame.sprite.Sprite):
             self.rect.left = 0
         elif self.rect.right >= SCREEN_WIDTH:
             self.rect.right = SCREEN_WIDTH
-            
-        self.vertical=0
-        self.horzontal=0
+
+    def update(self, pressed_keys):
+        """Updates the postion of the player"""
+        if pressed_keys[K_UP]:
+            self.jump()
+        if pressed_keys[K_RIGHT]:
+            self.walk(1)
+        if pressed_keys[K_LEFT]:
+            self.walk(-1)
+
+
+        self.x+=self.vx
+        self.y+=self.vy
+        self.vx+=self.ax
+        self.vy+=self.ay
+
+        self.accelerate()
+
+        #move ball to current x and y values
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+        self.keep_on_screen()
+
 
 
 if __name__ == '__main__':
