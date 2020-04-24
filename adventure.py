@@ -21,7 +21,7 @@ class Person(pygame.sprite.Sprite):
         """
         """
         super(Person, self).__init__()
-        self.surf = pygame.image.load("standing.png").convert()
+        self.surf = pygame.image.load("images/standing.png").convert()
         self.rect = self.surf.get_rect(center = (25,SCREEN_HEIGHT-50))
         self.x=self.rect.x
         self.y=self.rect.y

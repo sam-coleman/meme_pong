@@ -10,7 +10,7 @@ This game was created using pygame for our final project. It starts as a simple 
 * Install pygame
 
 ### Installing
-* Download pongV3.py, adventure.py, standing.png, allen.jpg, steve.png, amon.png all in the same folder
+* Download pongV3.py, adventure.py and standing.png, allen.jpg, steve.png, amon.png all in a sub-folder named 'images'
 
 ### Executing Program
 * Run pongV3.py

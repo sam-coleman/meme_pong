@@ -48,13 +48,15 @@ class Player(pygame.sprite.Sprite):
         self.y = self.rect.y
         self.score = 0
 
+        #when game starts, the minigame has not been played yet
+        self.played_minigame = False
     def allen_design(self): #switch paddles to allen downey design
         """Change design of paddles to Allen Downey theme
         """
 
         #change paddles to Steve and Amon
-        player0.surf = pygame.image.load("steve.png").convert()
-        player1.surf = pygame.image.load("amon.png").convert()
+        player0.surf = pygame.image.load("images/steve.png").convert()
+        player1.surf = pygame.image.load("images/amon.png").convert()
 
         #put player on right back in the correct position on screen
         player1.rect = self.surf.get_rect(
@@ -79,7 +81,7 @@ class Player(pygame.sprite.Sprite):
                 self.rect.y -= 1
             if pressed_keys[K_DOWN]:
                 self.rect.y += 1
-            if pressed_keys[K_RIGHT]:
+            if pressed_keys[K_RIGHT] and self.played_minigame == False:
                 self.rect.x += 1
         elif self.num == 0:
             if pressed_keys[K_w]:
@@ -96,6 +98,7 @@ class Player(pygame.sprite.Sprite):
             #NEED TO CHANGE TO STARTING THE MINI GAME, WHEN THE BIKE IS GOTTEN, THEN TRIGGER THE ALLEN_DESIGN FUNCTIONS
                 #MAKE BALL SPEED 0
                 #CALL RESET AFTER BIKE IS GOTTEN TO ALSO GET GAME GOING AGAIN
+            self.played_minigame = True
             self.allen_design()
             ball.allen_design()
 
@@ -147,7 +150,7 @@ class Ball(pygame.sprite.Sprite):
     def allen_design(self):
         """Change design of ball to Allen Downey theme
         """
-        self.surf = pygame.image.load("allen.jpg").convert()
+        self.surf = pygame.image.load("images/allen.jpg").convert()
 
     def reset(self):
         """Resets the ball to the center of the sceeen and makes it moves
