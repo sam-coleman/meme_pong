@@ -117,7 +117,7 @@ class Player(pygame.sprite.Sprite):
 
             #diff: calculate the difference in angle of the ball based on how off-center of the center of the
             #paddle the ball hits.
-            diff = ((self.rect.y + self.height/2) - (ball.rect.y + ball.height/2))*20/(self.height/2)
+            diff = ((self.rect.y + self.height/2) - (ball.rect.y + ball.height/2))*70/(self.height/2)
             if self.num==0:
                 ball.bounce(diff)
             if self.num==1:
