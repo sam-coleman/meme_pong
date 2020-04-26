@@ -36,20 +36,21 @@
           <h1>{{ site.title | default: site.github.repository_name }}</h1>
           <p>{{ site.description | default: site.github.project_tagline }}</p>
           <hr>
-          <span class="credits left">Project maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></span>
+          <span class="credits left">Project maintained by <a href="https://github.com/sam-coleman">Sam Coleman</a> & <a href="https://github.com/Winterbl00m">Hazel Smith</a></span>
           <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/mattgraham">mattgraham</a></span>
-        </div>
-
-        {{ content }}
-        
-      </section>
-      <aside id="sidebar">
+       <aside id="sidebar">
             <a class="button" href= "index">Project Overview</a>
             <a class="button" href= "results">Results</a>
             <a class="button" href= "story_of_us">Story of Us</a>
             <a class="button" href= "implementation">Implementation</a>
             <a class="button" href= "userinstructions">User Instructions</a>
       </aside>
+        </div>
+
+        {{ content }}
+        
+      </section>
+
     </div>
 
     {% if site.google_analytics %}
