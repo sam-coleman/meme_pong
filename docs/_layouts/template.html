@@ -38,10 +38,18 @@
       <section>
         <div id="title">
           <h1>{{ site.title | default: site.github.repository_name }}</h1>
+          <nav>
           <li class="fork"><a href= "index">Project Overview</a></li>
           <li class="fork"><a href= "results">Results</a></li>
           <li class="fork"><a href= "implementation">Implementation</a></li>
           <li class="fork"><a href= "userinstructions">User Instructions</a></li>
+          </nav>
+          <nav>
+          <li class="button"><a href= "index">Project Overview</a></li>
+          <li class="button"><a href= "results">Results</a></li>
+          <li class="button"><a href= "implementation">Implementation</a></li>
+          <li class="button"><a href= "userinstructions">User Instructions</a></li>
+          </nav>
           <p>{{ site.description | default: site.github.project_tagline }}</p>
           <hr>
           <span class="credits left">Project maintained by <a href="https://github.com/sam-coleman">Sam Coleman</a> & <a href="https://github.com/Winterbl00m">Hazel Smith</a></span>
