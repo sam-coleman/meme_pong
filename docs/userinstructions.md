@@ -4,7 +4,8 @@ layout: template
 filename: userinstructions
 ---
 
-# User Instructions
+# User Instructions     
+
 
 ## Dependencies
 * Install pygame
