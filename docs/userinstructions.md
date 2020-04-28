@@ -4,7 +4,7 @@ layout: template
 filename: userinstructions
 ---
 
-# User Instructions     
+# User Instructions
 
 
 ## Dependencies
@@ -27,7 +27,7 @@ python3 pongV3.py
 ```
 
 ## Authors
-[Sam Coleman](https://github.com/sam-coleman)
+[Sam Coleman](https://github.com/sam-coleman)    
 [Hazel Smith](https://github.com/Winterbl00m)
 
 ## Acknowledgments
