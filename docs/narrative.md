@@ -9,10 +9,10 @@ To say this project experience was an adventure that we didn't expect, would be 
 
 ![Process](TimelineGraphic.jpg)
 
-While creating our basic class structure, we did not have to include any implementation. Neither of us had any experience with Pygame, so we tried to create a strong class structure that we could expand upon and implement in the final project. But, of course, it was not this linear. Since we didn't have Pygame experience, we did not set up an ideal class strucure. The image below is a mini-outline of our original strucuture.
+While creating our basic class structure, we did not have to include any implementation. Neither of us had any experience with Pygame, so we tried to create a strong class structure that we could expand upon and implement in the final project. But, of course, it was not this linear. Since we didn't have Pygame experience, we did not set up an ideal class structure. The image below is a mini-outline of our original structure.
 
 ![Original Classes](origClasses.png)
 
-After beginning the implementation, we did a re-design of our plans and started from scratch. It would have been easier if we were still on campus together, as remote brainstorming (although there are useful tools) is still inferior to sitting next to eachother. After we set up a new structure, with [Real Python Pygame Tutorial](https://realpython.com/pygame-a-primer/) as a reference, we mainly worked asynchronously. The image below shows our updated class structure for the main pong game along with the adventure mini-game.
+After beginning the implementation, we did a redesign of our plans and started from scratch. It would have been easier if we were still on campus together, as remote brainstorming (although there are useful tools) is still inferior to sitting next to each other. After we set up a new structure, with [Real Python Pygame Tutorial](https://realpython.com/pygame-a-primer/) as a reference, we mainly worked asynchronously. The image below shows our updated class structure for the main pong game along with the adventure mini-game.
 
 ![Updated Classes](updatedClasses.png)
