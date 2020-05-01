@@ -4,7 +4,7 @@ layout: template
 filename: narrative
 ---
 
-# Narrative
+# Our Process and Learning
 To say this project experience was an adventure that we didn't expect, would be a gross understatement. In previous semesters of Software Design, this project would have been the final mini-project before the final project. However, the day we got assigned this mini-project, we received news that shattered our world. The entire campus got an email that Olin was going remote for the remainder of the semester due to COVID-19, and we all had to go home. This was unprecedented, and the mini-project morphed into just creating a basic class structure. The rest of that project was done remote, as was the final project. This was all while trying to adjust to the current "normal" situation of the world and being at home 24/7. It was rough. However, it also served as motivation to make people of the Olin community smile. The photo below shows our process and feelings before and after the COVID-19 announcement. On campus == happy, Off campus all at our homes == sad.
 
 ![Process](imgs/TimelineGraphic.jpg)
