@@ -217,6 +217,7 @@ class Ball(pygame.sprite.Sprite):
         self.rect.x = self.x
         self.rect.y = self.y
 
+
 class Scoreboard():
     """Scoreboard class displays the score of each player on the top of the screen
     """

@@ -85,7 +85,7 @@ class Person(pygame.sprite.Sprite):
         elif self.rect.right >= MAP_WIDTH:
             self.rect.right = MAP_WIDTH
 
-    def is_on_platform(self,platform):
+    def is_on_platform(self,platform,):
         """
         Checks if Person is on platform
         """
@@ -127,12 +127,6 @@ class Platform(pygame.sprite.Sprite):
         self.surf.fill((255, 255, 255))
         self.rect = self.surf.get_rect(center = (x,y))
 
-# class Screen():
-#     def __init__(self, width, height,top, left ):
-#         self.width= width
-#         self.height= height
-#         self.top=top
-#         self.left=left
 
 class Map():
     def __init__(self,platforms):
@@ -159,20 +153,16 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     person= Person(25,MAP_HEIGHT-50)
 
-    platform1=Platform(MAP_WIDTH/4,MAP_HEIGHT-1950)
-    platform2=Platform(MAP_WIDTH/2,MAP_HEIGHT-100)
-    platform3=Platform(3/4*MAP_WIDTH,MAP_HEIGHT-450)
-
-    all_sprites = pygame.sprite.Group()
-    all_sprites.add(person)
-    all_sprites.add(platform1)
-    all_sprites.add(platform2)
-    all_sprites.add(platform3)
-
     platform_group = pygame.sprite.Group()
-    platform_group.add(platform1)
-    platform_group.add(platform2)
-    platform_group.add(platform3)
+
+    i=1
+    j=1
+    for x in range(9):
+        platform=Platform(i*MAP_WIDTH/4,MAP_HEIGHT-150*(x+1))
+        platform_group.add(platform)
+        i+=j
+        if i==3 or i==1:
+            j=-j
 
     map=Map(platform_group)
 
@@ -201,11 +191,15 @@ if __name__ == '__main__':
         # Fill the screen with black
         screen.fill((0, 0, 0))
 
+        #draws the map and the person
         map.draw()
         r=Rect(person.rect.left, person.rect.top-map.screen_top, person.rect.width, person.rect.height)
         map.screen.blit(person.surf, r)
 
 
+        #Changes screen top based on person's position
+        # if person.on_platform==True:
+        #     map.screen_top=min(MAP_HEIGHT-SCREEN_HEIGHT,person.rect.bottom-SCREEN_HEIGHT/2)
         map.screen_top=min(MAP_HEIGHT-SCREEN_HEIGHT,person.rect.bottom-SCREEN_HEIGHT/2)
 
 
