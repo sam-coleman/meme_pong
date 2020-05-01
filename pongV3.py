@@ -112,7 +112,7 @@ class Player(pygame.sprite.Sprite):
         Args:
             ball (Ball object): instance of Ball object (defined below)
         """
-
+        
         if pygame.sprite.collide_rect(ball, self):
 
             #diff: calculate the difference in angle of the ball based on how off-center of the center of the
