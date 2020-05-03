@@ -1,7 +1,7 @@
 """
 SoftDes Spring 2020
-Micro-Project 4
-Pong Micro View Controller
+Final Project: Meme Pong
+Adventure Mini Game
 
 @authors: Sam Coleman and Hazel Smith
 """
@@ -48,7 +48,7 @@ class Person(pygame.sprite.Sprite):
         Makes person jump by checking if a person in on a surface
         and then changing the y velocity
         """
-        if self.is_touching_ground()==True: #or touching platform
+        if self.is_touching_ground()==True:
             self.vy=-1.5
 
     def walk(self,direction):
@@ -81,8 +81,6 @@ class Person(pygame.sprite.Sprite):
         """
         Ensures that the person stays in the map
         """
-        # if self.rect.top <= 0:
-        #     self.rect.top = 0
 
         if self.rect.bottom >= MAP_HEIGHT:#stops person faling through floor
             self.vy=0
@@ -281,13 +279,8 @@ while running:
     map.draw()
     person.draw(map)
 
-
     #Changes screen top based on person's position
     map.screen_top=min(MAP_HEIGHT-SCREEN_HEIGHT,person.rect.bottom-SCREEN_HEIGHT/2)
-
-
-    # for entity in all_sprites:
-    #     screen.blit(entity.surf, entity.rect)
 
     time.sleep(.001)
     pygame.display.update()

@@ -1,6 +1,7 @@
 """
 SoftDes Spring 2020
-Final Project: Pong
+Final Project: Meme Pong
+Pong Game Code
 
 @authors: Sam Coleman and Hazel Smith
 """
@@ -96,9 +97,6 @@ class Player(pygame.sprite.Sprite):
         elif self.rect.bottom >= SCREEN_HEIGHT:
             self.rect.bottom = SCREEN_HEIGHT
         elif self.num == 1 and self.rect.right == SCREEN_WIDTH: #will move player to minigame
-            #NEED TO CHANGE TO STARTING THE MINI GAME, WHEN THE BIKE IS GOTTEN, THEN TRIGGER THE ALLEN_DESIGN FUNCTIONS
-                #MAKE BALL SPEED 0
-                #CALL RESET AFTER BIKE IS GOTTEN TO ALSO GET GAME GOING AGAIN
             import adventure
             if adventure.person.has_bike==True:
                 self.played_minigame = True
