@@ -216,78 +216,81 @@ class Bike(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect(center = (platform.rect.left+platform.rect.width/2,platform.rect.top-50))
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-    # Initialize pygame
-    pygame.init()
-    print("running")
-    # Create the screen object
-    # The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
+# Initialize pygame
+pygame.init()
+print("running")
+# Create the screen object
+# The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
 
-    platform_group = pygame.sprite.Group()
-    all_sprites = pygame.sprite.Group()
+platform_group = pygame.sprite.Group()
+all_sprites = pygame.sprite.Group()
 
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    person= Person(25,MAP_HEIGHT-50)
-    all_sprites.add(person)
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+person= Person(25,MAP_HEIGHT-50)
+all_sprites.add(person)
 
-    #makes platforms and puts them into a group
-    x=1
-    direction=1
-    for y in range(9):
-        platform=Platform(x*MAP_WIDTH/4,MAP_HEIGHT-150*(y+1))
-        platform_group.add(platform)
-        all_sprites.add(platform)
-        x+=direction
-        if x==3 or x==1:
-            direction=-direction
+#makes platforms and puts them into a group
+x=1
+direction=1
+for y in range(9):
+    platform=Platform(x*MAP_WIDTH/4,MAP_HEIGHT-150*(y+1))
+    platform_group.add(platform)
+    all_sprites.add(platform)
+    x+=direction
+    if x==3 or x==1:
+        direction=-direction
 
-    #fins the height of the highest platform
-    max_platform_height=0
-    for platform in platform_group:
-        if platform.rect.top>max_platform_height:
-            max_platform=platform
+#fins the height of the highest platform
+max_platform_height=0
+for platform in platform_group:
+    if platform.rect.top>max_platform_height:
+        max_platform=platform
 
-    bike=Bike(max_platform)
-    all_sprites.add(bike)
+bike=Bike(max_platform)
+all_sprites.add(bike)
 
-    map=Map(platform_group,bike)
+map=Map(platform_group,bike)
 
-    running = True
-    while running:
-        #screen.bottom=person.rect.bottom
-        # Look at every event in the queue
-        for event in pygame.event.get():
-            # Did the user hit a key?
-            if event.type == KEYDOWN:
-                # Was it the Escape key? If so, stop the loop
-                if event.key == K_ESCAPE:
-                    running = False
-            # Did the user click the window close button? If so, stop the loop
-            elif event.type == QUIT:
+running = True
+while running:
+    #screen.bottom=person.rect.bottom
+    # Look at every event in the queue
+    for event in pygame.event.get():
+        # Did the user hit a key?
+        if event.type == KEYDOWN:
+            # Was it the Escape key? If so, stop the loop
+            if event.key == K_ESCAPE:
                 running = False
+        # Did the user click the window close button? If so, stop the loop
+        elif event.type == QUIT:
+            running = False
 
-        pressed_keys = pygame.key.get_pressed()
-        person.update(pressed_keys)
+    pressed_keys = pygame.key.get_pressed()
+    person.update(pressed_keys)
 
-        for platform in map.platforms:
-            person.is_on_platform(platform)
+    for platform in map.platforms:
+        person.is_on_platform(platform)
 
-        person.collides_with_bike(bike)
+    person.collides_with_bike(bike)
 
-        # Fill the screen with black
-        screen.fill((0, 0, 0))
-        #draws the map and the person
-        map.draw()
-        person.draw(map)
-
-
-        #Changes screen top based on person's position
-        map.screen_top=min(MAP_HEIGHT-SCREEN_HEIGHT,person.rect.bottom-SCREEN_HEIGHT/2)
+    # Fill the screen with black
+    screen.fill((0, 0, 0))
+    #draws the map and the person
+    map.draw()
+    person.draw(map)
 
 
-        # for entity in all_sprites:
-        #     screen.blit(entity.surf, entity.rect)
+    #Changes screen top based on person's position
+    map.screen_top=min(MAP_HEIGHT-SCREEN_HEIGHT,person.rect.bottom-SCREEN_HEIGHT/2)
 
-        time.sleep(.001)
-        pygame.display.update()
+
+    # for entity in all_sprites:
+    #     screen.blit(entity.surf, entity.rect)
+
+    time.sleep(.001)
+    pygame.display.update()
+    
+    if person.has_bike==True:
+        running = False

@@ -10,6 +10,7 @@ from pygame.locals import *
 import random
 import math
 
+
 # Define constants for the screen width and height
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
@@ -98,9 +99,11 @@ class Player(pygame.sprite.Sprite):
             #NEED TO CHANGE TO STARTING THE MINI GAME, WHEN THE BIKE IS GOTTEN, THEN TRIGGER THE ALLEN_DESIGN FUNCTIONS
                 #MAKE BALL SPEED 0
                 #CALL RESET AFTER BIKE IS GOTTEN TO ALSO GET GAME GOING AGAIN
-            self.played_minigame = True
-            self.allen_design()
-            ball.allen_design()
+            import adventure
+            if adventure.person.has_bike==True:
+                self.played_minigame = True
+                self.allen_design()
+                ball.allen_design()
 
     def hit_paddle(self,ball):
         """ Determine if paddle was hit by ball, and update motion accordingly
@@ -112,7 +115,7 @@ class Player(pygame.sprite.Sprite):
         Args:
             ball (Ball object): instance of Ball object (defined below)
         """
-        
+
         if pygame.sprite.collide_rect(ball, self):
 
             #diff: calculate the difference in angle of the ball based on how off-center of the center of the
