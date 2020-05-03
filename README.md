@@ -22,7 +22,7 @@ sudo apt-get install python3-numpy
 
 ### Executing Program
 ```bash
-python3 pongV3.py
+python3 pong.py
 ```
 ## Authors
 [Sam Coleman](https://github.com/sam-coleman)      
