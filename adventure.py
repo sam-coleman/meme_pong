@@ -291,6 +291,6 @@ while running:
 
     time.sleep(.001)
     pygame.display.update()
-    
-    if person.has_bike==True:
+
+    if person.has_bike==True and person.is_touching_ground()==True:
         running = False
