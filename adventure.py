@@ -54,6 +54,8 @@ class Person(pygame.sprite.Sprite):
     def walk(self,direction):
         """
         Makes person walk by changing x position
+
+        direction (integer): determines where player walks
         """
         self.x+=direction
 
@@ -95,6 +97,9 @@ class Person(pygame.sprite.Sprite):
     def is_on_platform(self,platform):
         """
         Checks if Person is on platform and if so stops the person from falling
+
+        args:
+            platorm (Platform object): check if person is on platform
         """
         if self.rect.bottom == platform.rect.top and self.rect.right<=platform.rect.right and self.rect.left>=platform.rect.left:
             self.vy=0
@@ -105,7 +110,7 @@ class Person(pygame.sprite.Sprite):
         Checks if Person is touching bike and if so changes the person's aperance
 
         args:
-            bike=bike object to check if the person has collided with
+            bike (Bike object): check if the person has collided with bike
 
         """
         if self.rect.colliderect(bike.rect):
@@ -115,9 +120,10 @@ class Person(pygame.sprite.Sprite):
             self.has_bike=True
 
     def update(self, pressed_keys):
-        """Updates the postion of the person
+        """Updates the postion of the person based on key press
 
-        Updates the position of the person based on what keys were pressed_keys
+        Args:
+            pressed_keys (pygame key object): which key is pressed
         """
         if pressed_keys[K_UP]:
             self.jump()
@@ -175,8 +181,8 @@ class Map():
         Init function creates a map object.
 
         args:
-            platform=pygame group of platforms in map
-            bike=a bike object
+            platform (pygame group of Platforms in map)
+            bike (Bike object)
         """
         self.width=MAP_WIDTH
         self.height=MAP_HEIGHT
@@ -207,29 +213,30 @@ class Bike(pygame.sprite.Sprite):
         Init function creates a bike object.
 
         args:
-            platform=platform object that bike should be on
+            platform (Platform object): The platform the bike is on
         """
         super(Bike, self).__init__()
         self.surf = pygame.image.load("images/Bike.png").convert()
         self.rect = self.surf.get_rect(center = (platform.rect.left+platform.rect.width/2,platform.rect.top-50))
 
 
-# if __name__ == '__main__':
-
 # Initialize pygame
 pygame.init()
 print("running")
+
 # Create the screen object
 # The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+# Create groups for sprites
 platform_group = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+#Create Person and add them all_sprites group
 person= Person(25,MAP_HEIGHT-50)
 all_sprites.add(person)
 
-#makes platforms and puts them into a group
+#make platforms and puts them into a group
 x=1
 direction=1
 for y in range(9):
@@ -240,12 +247,13 @@ for y in range(9):
     if x==3 or x==1:
         direction=-direction
 
-#fins the height of the highest platform
+#finds the height of the highest platform
 max_platform_height=0
 for platform in platform_group:
     if platform.rect.top>max_platform_height:
         max_platform=platform
 
+#create Bike object and add to all_sprites group
 bike=Bike(max_platform)
 all_sprites.add(bike)
 
@@ -253,7 +261,6 @@ map=Map(platform_group,bike)
 
 running = True
 while running:
-    #screen.bottom=person.rect.bottom
     # Look at every event in the queue
     for event in pygame.event.get():
         # Did the user hit a key?
@@ -265,16 +272,20 @@ while running:
         elif event.type == QUIT:
             running = False
 
+    # Get the set of keys pressed and check for user input
     pressed_keys = pygame.key.get_pressed()
     person.update(pressed_keys)
 
+    #check if Person is on any platform
     for platform in map.platforms:
         person.is_on_platform(platform)
 
+    #check if person has bike (the goal)
     person.collides_with_bike(bike)
 
     # Fill the screen with black
     screen.fill((0, 0, 0))
+
     #draws the map and the person
     map.draw()
     person.draw(map)
@@ -285,5 +296,7 @@ while running:
     time.sleep(.001)
     pygame.display.update()
 
+    #End Minigame: person has bike and has reached ground
+    #This returns to the pongs
     if person.has_bike==True and person.is_touching_ground()==True:
         running = False

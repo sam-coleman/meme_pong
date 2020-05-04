@@ -11,7 +11,6 @@ from pygame.locals import *
 import random
 import math
 
-
 # Define constants for the screen width and height
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
@@ -270,7 +269,7 @@ if __name__ == '__main__':
     ball=Ball()
     scoreboard = Scoreboard(font)
 
-    # Create groups to sprites
+    # Create groups for sprites
     # balls is used for collision detection and position updates
     # playes is used for collision detection and position updates
     # all_sprites is used for rendering
